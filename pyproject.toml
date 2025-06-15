@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "wyoming_elevenlabs"
 version = "0.3.1"
-description = "OpenAI-Compatible Proxy Middleware for the Wyoming Protocol"
+description = "ElevenLabs-Compatible Proxy Middleware for the Wyoming Protocol"
 authors = [
     { name = "Rory Eckel" }
 ]

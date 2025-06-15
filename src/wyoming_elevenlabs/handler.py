@@ -11,7 +11,7 @@ from wyoming.server import AsyncEventHandler
 from wyoming.tts import Synthesize
 
 from . import __version__
-from .compatibility import CustomAsyncOpenAI, TtsVoiceModel
+from .compatibility import CustomAsyncElevenLabs, TtsVoiceModel
 from .utilities import NamedBytesIO
 
 _LOGGER = logging.getLogger(__name__)
@@ -19,15 +19,15 @@ _LOGGER = logging.getLogger(__name__)
 DEFAULT_AUDIO_WIDTH = 2  # 16-bit audio
 DEFAULT_AUDIO_CHANNELS = 1  # Mono audio
 DEFAULT_ASR_AUDIO_RATE = 16000  # Hz (Wyoming default)
-TTS_AUDIO_RATE = 24000  # Hz (OpenAI spec)
+TTS_AUDIO_RATE = 24000  # Hz (ElevenLabs spec)
 TTS_CHUNK_SIZE = 2048  # Magical guess :)
 
-class OpenAIEventHandler(AsyncEventHandler):
+class ElevenLabsEventHandler(AsyncEventHandler):
     def __init__(
         self,
         *args,
-        stt_client: CustomAsyncOpenAI,
-        tts_client: CustomAsyncOpenAI,
+        stt_client: CustomAsyncElevenLabs,
+        tts_client: CustomAsyncElevenLabs,
         client_lock: asyncio.Lock,
         asr_models: list[AsrModel],
         stt_temperature: float | None = None,
@@ -53,7 +53,7 @@ class OpenAIEventHandler(AsyncEventHandler):
             asr=[
                 AsrProgram(
                     name="elevenlabs",
-                    description="OpenAI-Compatible Proxy",
+                    description="ElevenLabs-Compatible Proxy",
                     attribution=Attribution(
                         name="Rory Eckel",
                         url="https://github.com/roryeckel/wyoming-elevenlabs/",
@@ -66,7 +66,7 @@ class OpenAIEventHandler(AsyncEventHandler):
             tts=[
                 TtsProgram(
                     name="elevenlabs",
-                    description="OpenAI-Compatible Proxy",
+                    description="ElevenLabs-Compatible Proxy",
                     attribution=Attribution(
                         name="Rory Eckel",
                         url="https://github.com/roryeckel/wyoming-elevenlabs/",
@@ -173,7 +173,7 @@ class OpenAIEventHandler(AsyncEventHandler):
             # Reset buffer position to start
             self._wav_buffer.seek(0)
 
-            # Send to OpenAI for transcription
+            # Send to ElevenLabs for transcription
             async with self._client_lock:
                 result = await self._stt_client.audio.transcriptions.create(
                     file=self._wav_buffer,

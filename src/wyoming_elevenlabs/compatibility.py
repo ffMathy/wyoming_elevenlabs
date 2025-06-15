@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 from typing import override
 
-from elevenlabs import AsyncOpenAI
+from elevenlabs import AsyncElevenLabs
 from wyoming.info import AsrModel, Attribution, TtsVoice
 
 _LOGGER = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ def create_asr_models(stt_models: list[str], stt_url: str, languages: list[str])
             name=model_name,
             description=model_name,
             attribution=Attribution(
-                name="OpenAI Wyoming Proxy",
+                name="ElevenLabs Wyoming Proxy",
                 url=stt_url
             ),
             installed=True,
@@ -75,7 +75,7 @@ def create_tts_voices(tts_models: list[str], tts_voices: list[str], tts_url: str
                 description=f"{voice} ({model_name})",
                 model_name=model_name,
                 attribution=Attribution(
-                    name="OpenAI Wyoming Proxy",
+                    name="ElevenLabs Wyoming Proxy",
                     url=tts_url
                 ),
                 installed=True,
@@ -131,17 +131,17 @@ def tts_voice_to_string(tts_voice_model: TtsVoiceModel) -> str:
 #     base_urls: Set[str]
 # ):
 # """
-# Asynchronously fetches OpenAI models from given base URLs.
+# Asynchronously fetches ElevenLabs models from given base URLs.
 
 # Args:
-#     api_key (str): The API key for accessing OpenAI services.
+#     api_key (str): The API key for accessing ElevenLabs services.
 #     base_urls (Set[str]): A set of base URLs to fetch the models from.
 # """
 #     logger = logging.getLogger(__name__)
-#     logger.debug("Fetching OpenAI models...")
+#     logger.debug("Fetching ElevenLabs models...")
 #
 #     for base_url in base_urls:
-#         async with AsyncOpenAI(api_key=api_key, base_url=base_url) as client:
+#         async with AsyncElevenLabs(api_key=api_key, base_url=base_url) as client:
 #             try:
 #                 models_response = await client.models.list()
 #
@@ -149,21 +149,21 @@ def tts_voice_to_string(tts_voice_model: TtsVoiceModel) -> str:
 #                     logger.info("Found model: %s", model.id)
 #
 #             except Exception as e:
-#                 logger.error("Failed to fetch OpenAI models: %s", e)
+#                 logger.error("Failed to fetch ElevenLabs models: %s", e)
 
-class OpenAIBackend(Enum):
+class ElevenLabsBackend(Enum):
     ELEVENLABS = 0 # "Official"
     SPEACHES = 1
     KOKORO_FASTAPI = 2
 
-class CustomAsyncOpenAI(AsyncOpenAI):
+class CustomAsyncElevenLabs(AsyncElevenLabs):
     """
-    Custom implementation of OpenAI's AsyncOpenAI class to handle API key authentication being optional.
+    Custom implementation of ElevenLabs's AsyncElevenLabs class to handle API key authentication being optional.
     """
     def __init__(self, *args, **kwargs):
         if "api_key" not in kwargs or not kwargs["api_key"]:
             kwargs["api_key"] = ""
-        self.backend: OpenAIBackend = kwargs.pop("backend", OpenAIBackend.ELEVENLABS)
+        self.backend: ElevenLabsBackend = kwargs.pop("backend", ElevenLabsBackend.ELEVENLABS)
         super().__init__(*args, **kwargs)
 
     @property
@@ -177,11 +177,11 @@ class CustomAsyncOpenAI(AsyncOpenAI):
             del super_headers["Authorization"]
         return super_headers
 
-    # OpenAI
+    # ElevenLabs
 
     async def list_elevenlabs_voices(self) -> list[str]:
         """
-        Not official implemented by OpenAI, hard-coded.
+        Not official implemented by ElevenLabs, hard-coded.
         https://platform.elevenlabs.com/docs/guides/text-to-speech/voice-options
         """
         return ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer']
@@ -203,10 +203,10 @@ class CustomAsyncOpenAI(AsyncOpenAI):
     async def _list_kokoro_fastapi_voices(self) -> list[str]:
         """
         Fetches the available audio voices from the Kokoro-FastAPI /audio/voices endpoint.
-        Caution: This is not a part of official OpenAI spec.
+        Caution: This is not a part of official ElevenLabs spec.
         Example: ["af_sky"]
         """
-        if self.backend != OpenAIBackend.KOKORO_FASTAPI:
+        if self.backend != ElevenLabsBackend.KOKORO_FASTAPI:
             _LOGGER.debug("Skipping /audio/voices request because backend is not KOKORO_FASTAPI")
             return []
 
@@ -236,9 +236,9 @@ class CustomAsyncOpenAI(AsyncOpenAI):
         """
         Fetches the available voices from the Speaches /models/{model_name}
         and optionally falls back to the older /audio/speech/voices endpoint.
-        Caution: This is not a part of official OpenAI spec.
+        Caution: This is not a part of official ElevenLabs spec.
         """
-        if self.backend != OpenAIBackend.SPEACHES:
+        if self.backend != ElevenLabsBackend.SPEACHES:
             _LOGGER.debug("Skipping /models/{model_name} request because backend is not SPEACHES", model_name=model_name)
             return []
 
@@ -293,11 +293,11 @@ class CustomAsyncOpenAI(AsyncOpenAI):
 
         tts_voice_models = []
         for model_name in model_names:
-            if self.backend == OpenAIBackend.ELEVENLABS:
+            if self.backend == ElevenLabsBackend.ELEVENLABS:
                 tts_voices = await self.list_elevenlabs_voices()
-            elif self.backend == OpenAIBackend.SPEACHES:
+            elif self.backend == ElevenLabsBackend.SPEACHES:
                 tts_voices = await self._list_speaches_voices(model_name)
-            elif self.backend == OpenAIBackend.KOKORO_FASTAPI:
+            elif self.backend == ElevenLabsBackend.KOKORO_FASTAPI:
                 tts_voices = await self._list_kokoro_fastapi_voices()
             else:
                 _LOGGER.warning("Unknown backend: %s", self.backend)
@@ -321,16 +321,16 @@ class CustomAsyncOpenAI(AsyncOpenAI):
         async def factory(*args, **kwargs):
             client = cls(*args, **kwargs)
             if await client._is_speaches():
-                client.backend = OpenAIBackend.SPEACHES
+                client.backend = ElevenLabsBackend.SPEACHES
             elif await client._is_kokoro_fastapi():
-                client.backend = OpenAIBackend.KOKORO_FASTAPI
+                client.backend = ElevenLabsBackend.KOKORO_FASTAPI
             else:
-                client.backend = OpenAIBackend.ELEVENLABS
+                client.backend = ElevenLabsBackend.ELEVENLABS
             return client
         return factory
 
     @classmethod
-    def create_backend_factory(cls, backend: OpenAIBackend):
+    def create_backend_factory(cls, backend: ElevenLabsBackend):
         """
         Create a factory for a specific backend type.
         """

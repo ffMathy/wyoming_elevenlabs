@@ -1,22 +1,22 @@
-# Wyoming OpenAI
+# Wyoming ElevenLabs
 
-OpenAI-Compatible Proxy Middleware for the Wyoming Protocol
+ElevenLabs-Compatible Proxy Middleware for the Wyoming Protocol
 
 **Author:** Rory Eckel
 
-Note: This project is not affiliated with OpenAI or the Wyoming project.
+Note: This project is not affiliated with ElevenLabs or the Wyoming project.
 
 ## Overview
 
-This project introduces a [Wyoming](https://github.com/rhasspy/wyoming) server that connects to OpenAI-compatible endpoints of your choice. Like a proxy, it enables Wyoming clients such as the [Home Assistant Wyoming Integration](https://www.home-assistant.io/integrations/wyoming/) to use the transcription (Automatic Speech Recognition - ASR) and text-to-speech synthesis (TTS) capabilities of various OpenAI-compatible projects. By acting as a bridge between the Wyoming protocol and OpenAI, you can consolidate the resource usage on your server and extend the capabilities of Home Assistant.
+This project introduces a [Wyoming](https://github.com/rhasspy/wyoming) server that connects to ElevenLabs-compatible endpoints of your choice. Like a proxy, it enables Wyoming clients such as the [Home Assistant Wyoming Integration](https://www.home-assistant.io/integrations/wyoming/) to use the transcription (Automatic Speech Recognition - ASR) and text-to-speech synthesis (TTS) capabilities of various ElevenLabs-compatible projects. By acting as a bridge between the Wyoming protocol and ElevenLabs, you can consolidate the resource usage on your server and extend the capabilities of Home Assistant.
 
 ## Objectives
 
-1. **Wyoming Server, OpenAI-compatible Client**: Function as an intermediary between the Wyoming protocol and OpenAI's ASR and TTS services.
+1. **Wyoming Server, ElevenLabs-compatible Client**: Function as an intermediary between the Wyoming protocol and ElevenLabs's ASR and TTS services.
 2. **Service Consolidation**: Allow users of various programs to run inference on a single server without needing separate instances for each service.
 Example: Sharing TTS/STT services between [Open WebUI](#open-webui) and [Home Assistant](#usage-in-home-assistant).
 3. **Asynchronous Processing**: Enable efficient handling of multiple requests by supporting asynchronous processing of audio streams.
-4. **Simple Setup with Docker**: Provide a straightforward deployment process using [Docker and Docker Compose](#docker-recommended) for OpenAI and various popular open source projects.
+4. **Simple Setup with Docker**: Provide a straightforward deployment process using [Docker and Docker Compose](#docker-recommended) for ElevenLabs and various popular open source projects.
 
 ## Terminology
 
@@ -28,7 +28,7 @@ Example: Sharing TTS/STT services between [Open WebUI](#open-webui) and [Home As
 ### Prerequisites
 
 - Tested with Python 3.12
-- Optional: OpenAI API key(s) if using proprietary models
+- Optional: ElevenLabs API key(s) if using proprietary models
 
 ### Instructions
 
@@ -90,7 +90,7 @@ python -m wyoming_elevenlabs \
 
 ## Configuration Options
 
-In addition to using command-line arguments, you can configure the Wyoming OpenAI proxy server via environment variables. This is especially useful for containerized deployments.
+In addition to using command-line arguments, you can configure the Wyoming ElevenLabs proxy server via environment variables. This is especially useful for containerized deployments.
 
 ### Table of Environment & Command Line Options
 
@@ -99,14 +99,14 @@ In addition to using command-line arguments, you can configure the Wyoming OpenA
 | `--uri`                                 | `WYOMING_URI`                              | tcp://0.0.0.0:10300                           | The URI for the Wyoming server to bind to.                           |
 | `--log-level`                           | `WYOMING_LOG_LEVEL`                        | INFO                                          | Sets the logging level (e.g., INFO, DEBUG).                          |
 | `--languages`                           | `WYOMING_LANGUAGES`                        | en                                            | Space-separated list of supported languages to advertise.            |
-| `--stt-elevenlabs-key`                      | `STT_ELEVENLABS_KEY`                           | None                                          | Optional API key for OpenAI-compatible speech-to-text services.      |
-| `--stt-elevenlabs-url`                      | `STT_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the  OpenAI-compatible speech-to-text API            |
+| `--stt-elevenlabs-key`                      | `STT_ELEVENLABS_KEY`                           | None                                          | Optional API key for ElevenLabs-compatible speech-to-text services.      |
+| `--stt-elevenlabs-url`                      | `STT_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the  ElevenLabs-compatible speech-to-text API            |
 | `--stt-models`                          | `STT_MODELS`                               | gpt-4o-transcribe gpt-4o-mini-transcribe whisper-1            | Space-separated list of models to use for the STT service.           |
 | `--stt-backend`                         | `STT_BACKEND`                              | None (autodetected)                             | Enable unofficial API feature sets.          |
 | `--stt-temperature`                     | `STT_TEMPERATURE`                          | None (autodetected)                                          | Sampling temperature for speech-to-text (ranges from 0.0 to 1.0)               |
 | `--stt-prompt`                          | `STT_PROMPT`                               | None                                          | Optional prompt for STT requests (Text to guide the model's style).   |
-| `--tts-elevenlabs-key`                      | `TTS_ELEVENLABS_KEY`                           | None                                          | Optional API key for OpenAI-compatible text-to-speech services.      |
-| `--tts-elevenlabs-url`                      | `TTS_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the OpenAI-compatible text-to-speech API            |
+| `--tts-elevenlabs-key`                      | `TTS_ELEVENLABS_KEY`                           | None                                          | Optional API key for ElevenLabs-compatible text-to-speech services.      |
+| `--tts-elevenlabs-url`                      | `TTS_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the ElevenLabs-compatible text-to-speech API            |
 | `--tts-models`                          | `TTS_MODELS`                               | gpt-4o-mini-tts tts-1-hd tts-1                                | Space-separated list of models to use for the TTS service.           |
 | `--tts-voices`                          | `TTS_VOICES`                               | Empty (autodetected)                             | Space-separated list of voices for TTS.        |
 | `--tts-backend`                         | `TTS_BACKEND`                              | None (autodetected)                             | Enable unofficial API feature sets.          |
@@ -121,15 +121,15 @@ In addition to using command-line arguments, you can configure the Wyoming OpenA
 
 ### Deployment Options
 
-You can deploy the Wyoming OpenAI proxy server in different environments depending on whether you are using official OpenAI services or a local alternative like Speaches. You can even run multiple wyoming_elevenlabs instances on different ports for different purposes. Below are example scenarios:
+You can deploy the Wyoming ElevenLabs proxy server in different environments depending on whether you are using official ElevenLabs services or a local alternative like Speaches. You can even run multiple wyoming_elevenlabs instances on different ports for different purposes. Below are example scenarios:
 
-#### 1. Deploying with Official OpenAI Services
+#### 1. Deploying with Official ElevenLabs Services
 
-To set up the Wyoming OpenAI proxy to work with official OpenAI APIs, follow these steps:
+To set up the Wyoming ElevenLabs proxy to work with official ElevenLabs APIs, follow these steps:
 
 - **Environment Variables**: Create a `.env` file in your project directory that includes necessary environment variables such as `STT_ELEVENLABS_KEY`, `TTS_ELEVENLABS_KEY`.
 
-- **Docker Compose Configuration**: Use the provided `docker-compose.yml` template. This setup binds a Wyoming server to port 10300 and uses environment variables for OpenAI URLs, model configurations, and voices as specified in the compose file.
+- **Docker Compose Configuration**: Use the provided `docker-compose.yml` template. This setup binds a Wyoming server to port 10300 and uses environment variables for ElevenLabs URLs, model configurations, and voices as specified in the compose file.
 
 - **Command**:
   
@@ -139,9 +139,9 @@ To set up the Wyoming OpenAI proxy to work with official OpenAI APIs, follow the
 
 #### 2. Deploying with Speaches Local Service
 
-If you prefer using a local service like Speaches instead of official OpenAI services, follow these instructions:
+If you prefer using a local service like Speaches instead of official ElevenLabs services, follow these instructions:
 
-- **Docker Compose Configuration**: Use the `docker-compose.speaches.yml` template which includes configuration for both the Wyoming OpenAI proxy and the Speaches service.
+- **Docker Compose Configuration**: Use the `docker-compose.speaches.yml` template which includes configuration for both the Wyoming ElevenLabs proxy and the Speaches service.
 
 - **Speaches Setup**:
   - The Speaches container is configured with specific model settings (`Systran/faster-distil-whisper-large-v3` for STT and `speaches-ai/Kokoro-82M-v1.0-ONNX` for TTS).
@@ -158,7 +158,7 @@ If you prefer using a local service like Speaches instead of official OpenAI ser
 
 For users preferring a setup that leverages Kokoro-FastAPI for TTS and Speaches for STT, follow these instructions:
 
-- **Docker Compose Configuration**: Use the `docker-compose.kokoro-fastapi.yml` template which includes configuration for both the Wyoming OpenAI proxy and Kokoro-FastAPI TTS service (Kokoro).
+- **Docker Compose Configuration**: Use the `docker-compose.kokoro-fastapi.yml` template which includes configuration for both the Wyoming ElevenLabs proxy and Kokoro-FastAPI TTS service (Kokoro).
 
 - **Speaches Setup**:
   - Use it in combination with the Speaches container for access to STT.
@@ -176,7 +176,7 @@ For users preferring a setup that leverages Kokoro-FastAPI for TTS and Speaches 
 
 #### 4. Development with Docker
 
-If you are developing the Wyoming OpenAI proxy server and want to build it from source, use the `docker-compose.dev.yml` file along with the base configuration.
+If you are developing the Wyoming ElevenLabs proxy server and want to build it from source, use the `docker-compose.dev.yml` file along with the base configuration.
 
 - **Command**:
   
@@ -198,45 +198,45 @@ For a development setup using the Speaches local service, combine `docker-compos
 
 We follow specific tagging conventions for our Docker images. These tags help in identifying the version and branch of the code that a particular Docker image is based on.
 
-- **`latest`**: This tag always points to the latest stable release of the Wyoming OpenAI proxy server. It is recommended for users who want to run the most recent, well-tested version without worrying about specific versions.
+- **`latest`**: This tag always points to the latest stable release of the Wyoming ElevenLabs proxy server. It is recommended for users who want to run the most recent, well-tested version without worrying about specific versions.
 
 - **`main`**: This tag points to the latest commit on the main code branch. It is suitable for users who want to experiment with the most up-to-date features and changes, but may include unstable or experimental code.
 
-- **`major.minor.patch version`**: Specific version tags (e.g., `0.3.1`) correspond to specific stable releases of the Wyoming OpenAI proxy server. These tags are ideal for users who need a consistent, reproducible environment and want to avoid breaking changes introduced in newer versions.
+- **`major.minor.patch version`**: Specific version tags (e.g., `0.3.1`) correspond to specific stable releases of the Wyoming ElevenLabs proxy server. These tags are ideal for users who need a consistent, reproducible environment and want to avoid breaking changes introduced in newer versions.
 
 - **`major.minor version`**: Tags that follow the `major.minor` format (e.g., `0.2`) represent a range of patch-level updates within the same minor version series. These tags are useful for users who want to stay updated with bug fixes and minor improvements without upgrading to a new major or minor version.
 
 ### General Deployment Steps
 
 1. **Start Services**: Run the appropriate Docker Compose command based on your deployment option.
-2. **Verify Deployment**: Ensure that all services are running by checking the logs with `docker compose logs -f` or accessing the Wyoming OpenAI proxy through its exposed port (e.g., 10300) to ensure it responds as expected.
+2. **Verify Deployment**: Ensure that all services are running by checking the logs with `docker compose logs -f` or accessing the Wyoming ElevenLabs proxy through its exposed port (e.g., 10300) to ensure it responds as expected.
 3. **Configuration Changes**: You can modify environment variables in the `.env` file or directly within your Docker Compose configuration files to adjust settings such as languages, models, and voices without rebuilding containers.
 
 ## Usage in Home Assistant
 
-1. Install & set up your Wyoming OpenAI instance using one of the [deployment options](#deployment-options) above.
-2. In HA, Go to Settings, Devices & Services, Add Integration, and search for Wyoming Protocol. Add the Wyoming Protocol integration with the URI of your Wyoming OpenAI instance.
-3. The hard part is over! Configure your Voice Assistant pipeline to use the STT/TTS services provided by your new Wyoming OpenAI instance.
+1. Install & set up your Wyoming ElevenLabs instance using one of the [deployment options](#deployment-options) above.
+2. In HA, Go to Settings, Devices & Services, Add Integration, and search for Wyoming Protocol. Add the Wyoming Protocol integration with the URI of your Wyoming ElevenLabs instance.
+3. The hard part is over! Configure your Voice Assistant pipeline to use the STT/TTS services provided by your new Wyoming ElevenLabs instance.
 
 #### Reloading Configuration Changes in Home Assistant
 
-When you make changes to your configuration such as updating models, voices, or URLs, it's important to reload the Wyoming OpenAI integration in Home Assistant to apply these changes. Here's how to do it:
+When you make changes to your configuration such as updating models, voices, or URLs, it's important to reload the Wyoming ElevenLabs integration in Home Assistant to apply these changes. Here's how to do it:
 
 1. Go to **Settings** > **Devices & Services**
-2. Find and select your **Wyoming OpenAI** integration
+2. Find and select your **Wyoming ElevenLabs** integration
 3. Click on **Reload**
 
 ### Sequence Diagrams
 
 #### Home Assistant
 
-Home Assistant uses the Wyoming Protocol integration to communicate with the Wyoming OpenAI proxy server. The proxy server then communicates with the OpenAI API to perform the requested ASR or TTS tasks. The results are then sent back to Home Assistant.
+Home Assistant uses the Wyoming Protocol integration to communicate with the Wyoming ElevenLabs proxy server. The proxy server then communicates with the ElevenLabs API to perform the requested ASR or TTS tasks. The results are then sent back to Home Assistant.
 
 ```mermaid
 sequenceDiagram
   participant HA as Home Assistant
   participant WY as wyoming_elevenlabs
-  participant OAPI as OpenAI API
+  participant OAPI as ElevenLabs API
   Note over HA,OAPI: Speech-to-Text (STT/ASR) Flow
   HA->>WY: Transcribe event
   HA->>WY: AudioStart event
@@ -261,12 +261,12 @@ sequenceDiagram
 
 #### Open WebUI
 
-No proxy is needed for Open WebUI, because it has native support for OpenAI-compatible endpoints.
+No proxy is needed for Open WebUI, because it has native support for ElevenLabs-compatible endpoints.
 
 ```mermaid
 sequenceDiagram
     participant OW as Open WebUI
-    participant OAPI as OpenAI API
+    participant OAPI as ElevenLabs API
 
     Note over OW,OAPI: Speech-to-Text (STT/ASR) Flow
     OW->>OAPI: Direct audio transcription request
@@ -280,9 +280,9 @@ sequenceDiagram
 
 ## Future Plans (Descending Priority)
 
-- Improved streaming support directly to OpenAI APIs
-- Reverse direction support (Server for OpenAI compatible endpoints - possibly FastAPI)
-- OpenAI Realtime API
+- Improved streaming support directly to ElevenLabs APIs
+- Reverse direction support (Server for ElevenLabs compatible endpoints - possibly FastAPI)
+- ElevenLabs Realtime API
 
 ## Contributing
 
