@@ -35,8 +35,8 @@ Example: Sharing TTS/STT services between [Open WebUI](#open-webui) and [Home As
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/roryeckel/wyoming-openai.git
-   cd wyoming-openai
+   git clone https://github.com/roryeckel/wyoming-elevenlabs.git
+   cd wyoming-elevenlabs
    ```
 
 2. **Create a Virtual Environment** (optional but recommended)
@@ -51,7 +51,7 @@ Example: Sharing TTS/STT services between [Open WebUI](#open-webui) and [Home As
     ```bash
     pip install -e .
     ```
-    Assuming you have activated a virtual environment, the wyoming_openai package will be installed into it. This will build and install the package in editable mode, allowing you to make changes to the code without needing to reinstall it each time.
+    Assuming you have activated a virtual environment, the wyoming_elevenlabs package will be installed into it. This will build and install the package in editable mode, allowing you to make changes to the code without needing to reinstall it each time.
 
     Or, if you prefer to install it as a regular (production) package:
 
@@ -72,19 +72,19 @@ The proxy server can be configured using several command line arguments to tailo
 Assuming you have installed the package in your current environment, you can run the server with the following command:
 
 ```bash
-python -m wyoming_openai \
+python -m wyoming_elevenlabs \
   --uri tcp://0.0.0.0:10300 \
   --log-level INFO \
   --languages en \
-  --stt-openai-key YOUR_STT_API_KEY_HERE \
-  --stt-openai-url https://api.openai.com/v1 \
+  --stt-elevenlabs-key YOUR_STT_API_KEY_HERE \
+  --stt-elevenlabs-url https://api.elevenlabs.com/v1 \
   --stt-models gpt-4o-transcribe gpt-4o-mini-transcribe whisper-1 \
-  --stt-backend OPENAI \
-  --tts-openai-key YOUR_TTS_API_KEY_HERE \
-  --tts-openai-url https://api.openai.com/v1 \
+  --stt-backend ELEVENLABS \
+  --tts-elevenlabs-key YOUR_TTS_API_KEY_HERE \
+  --tts-elevenlabs-url https://api.elevenlabs.com/v1 \
   --tts-models gpt-4o-mini-tts tts-1-hd tts-1 \
   --tts-voices alloy ash coral echo fable onyx nova sage shimmer \
-  --tts-backend OPENAI \
+  --tts-backend ELEVENLABS \
   --tts-speed 1.0
 ```
 
@@ -99,14 +99,14 @@ In addition to using command-line arguments, you can configure the Wyoming OpenA
 | `--uri`                                 | `WYOMING_URI`                              | tcp://0.0.0.0:10300                           | The URI for the Wyoming server to bind to.                           |
 | `--log-level`                           | `WYOMING_LOG_LEVEL`                        | INFO                                          | Sets the logging level (e.g., INFO, DEBUG).                          |
 | `--languages`                           | `WYOMING_LANGUAGES`                        | en                                            | Space-separated list of supported languages to advertise.            |
-| `--stt-openai-key`                      | `STT_OPENAI_KEY`                           | None                                          | Optional API key for OpenAI-compatible speech-to-text services.      |
-| `--stt-openai-url`                      | `STT_OPENAI_URL`                           | https://api.openai.com/v1                     | The base URL for the OpenAI-compatible speech-to-text API            |
+| `--stt-elevenlabs-key`                      | `STT_ELEVENLABS_KEY`                           | None                                          | Optional API key for OpenAI-compatible speech-to-text services.      |
+| `--stt-elevenlabs-url`                      | `STT_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the OpenAI-compatible speech-to-text API            |
 | `--stt-models`                          | `STT_MODELS`                               | gpt-4o-transcribe gpt-4o-mini-transcribe whisper-1            | Space-separated list of models to use for the STT service.           |
 | `--stt-backend`                         | `STT_BACKEND`                              | None (autodetected)                             | Enable unofficial API feature sets.          |
 | `--stt-temperature`                     | `STT_TEMPERATURE`                          | None (autodetected)                                          | Sampling temperature for speech-to-text (ranges from 0.0 to 1.0)               |
 | `--stt-prompt`                          | `STT_PROMPT`                               | None                                          | Optional prompt for STT requests (Text to guide the model's style).   |
-| `--tts-openai-key`                      | `TTS_OPENAI_KEY`                           | None                                          | Optional API key for OpenAI-compatible text-to-speech services.      |
-| `--tts-openai-url`                      | `TTS_OPENAI_URL`                           | https://api.openai.com/v1                     | The base URL for the OpenAI-compatible text-to-speech API            |
+| `--tts-elevenlabs-key`                      | `TTS_ELEVENLABS_KEY`                           | None                                          | Optional API key for OpenAI-compatible text-to-speech services.      |
+| `--tts-elevenlabs-url`                      | `TTS_ELEVENLABS_URL`                           | https://api.elevenlabs.com/v1                     | The base URL for the OpenAI-compatible text-to-speech API            |
 | `--tts-models`                          | `TTS_MODELS`                               | gpt-4o-mini-tts tts-1-hd tts-1                                | Space-separated list of models to use for the TTS service.           |
 | `--tts-voices`                          | `TTS_VOICES`                               | Empty (autodetected)                             | Space-separated list of voices for TTS.        |
 | `--tts-backend`                         | `TTS_BACKEND`                              | None (autodetected)                             | Enable unofficial API feature sets.          |
@@ -121,13 +121,13 @@ In addition to using command-line arguments, you can configure the Wyoming OpenA
 
 ### Deployment Options
 
-You can deploy the Wyoming OpenAI proxy server in different environments depending on whether you are using official OpenAI services or a local alternative like Speaches. You can even run multiple wyoming_openai instances on different ports for different purposes. Below are example scenarios:
+You can deploy the Wyoming OpenAI proxy server in different environments depending on whether you are using official OpenAI services or a local alternative like Speaches. You can even run multiple wyoming_elevenlabs instances on different ports for different purposes. Below are example scenarios:
 
 #### 1. Deploying with Official OpenAI Services
 
 To set up the Wyoming OpenAI proxy to work with official OpenAI APIs, follow these steps:
 
-- **Environment Variables**: Create a `.env` file in your project directory that includes necessary environment variables such as `STT_OPENAI_KEY`, `TTS_OPENAI_KEY`.
+- **Environment Variables**: Create a `.env` file in your project directory that includes necessary environment variables such as `STT_ELEVENLABS_KEY`, `TTS_ELEVENLABS_KEY`.
 
 - **Docker Compose Configuration**: Use the provided `docker-compose.yml` template. This setup binds a Wyoming server to port 10300 and uses environment variables for OpenAI URLs, model configurations, and voices as specified in the compose file.
 
@@ -235,7 +235,7 @@ Home Assistant uses the Wyoming Protocol integration to communicate with the Wyo
 ```mermaid
 sequenceDiagram
   participant HA as Home Assistant
-  participant WY as wyoming_openai
+  participant WY as wyoming_elevenlabs
   participant OAPI as OpenAI API
   Note over HA,OAPI: Speech-to-Text (STT/ASR) Flow
   HA->>WY: Transcribe event

@@ -49,14 +49,14 @@ async def main():
 
     # STT configuration
     parser.add_argument(
-        "--stt-openai-key",
+        "--stt-elevenlabs-key",
         required=False,
-        default=os.getenv("STT_OPENAI_KEY", None),
+        default=os.getenv("STT_ELEVENLABS_KEY", None),
         help="OpenAI API key for speech-to-text"
     )
     parser.add_argument(
-        "--stt-openai-url",
-        default=os.getenv("STT_OPENAI_URL", "https://api.openai.com/v1"),
+        "--stt-elevenlabs-url",
+        default=os.getenv("STT_ELEVENLABS_URL", "https://api.elevenlabs.com/v1"),
         help="Custom OpenAI API base URL for STT"
     )
     parser.add_argument(
@@ -71,7 +71,7 @@ async def main():
         required=False,
         choices=list(OpenAIBackend),
         default=OpenAIBackend[env_stt_backend] if env_stt_backend else None,
-        help="Backend for speech-to-text (OPENAI, SPEACHES, KOKORO_FASTAPI, or None)"
+        help="Backend for speech-to-text (ELEVENLABS, SPEACHES, KOKORO_FASTAPI, or None)"
     )
     parser.add_argument(
         "--stt-temperature",
@@ -87,14 +87,14 @@ async def main():
 
     # TTS configuration
     parser.add_argument(
-        "--tts-openai-key",
+        "--tts-elevenlabs-key",
         required=False,
-        default=os.getenv("TTS_OPENAI_KEY", None),
+        default=os.getenv("TTS_ELEVENLABS_KEY", None),
         help="OpenAI API key for text-to-speech"
     )
     parser.add_argument(
-        "--tts-openai-url",
-        default=os.getenv("TTS_OPENAI_URL", "https://api.openai.com/v1"),
+        "--tts-elevenlabs-url",
+        default=os.getenv("TTS_ELEVENLABS_URL", "https://api.elevenlabs.com/v1"),
         help="Custom OpenAI API base URL for TTS"
     )
     parser.add_argument(
@@ -116,7 +116,7 @@ async def main():
         required=False,
         choices=list(OpenAIBackend),
         default=OpenAIBackend[env_tts_backend] if env_tts_backend else None,
-        help="Backend for text-to-speech (OPENAI, SPEACHES, KOKORO_FASTAPI, or None)"
+        help="Backend for text-to-speech (ELEVENLABS, SPEACHES, KOKORO_FASTAPI, or None)"
     )
     parser.add_argument(
         "--tts-speed",
@@ -143,7 +143,7 @@ async def main():
         stt_factory = CustomAsyncOpenAI.create_autodetected_factory()
     else:
         stt_factory = CustomAsyncOpenAI.create_backend_factory(args.stt_backend)
-    stt_client = await stt_factory(api_key=args.stt_openai_key, base_url=args.stt_openai_url)
+    stt_client = await stt_factory(api_key=args.stt_elevenlabs_key, base_url=args.stt_elevenlabs_url)
     _logger.debug("Detected STT backend: %s", stt_client.backend)
 
     if args.tts_backend is None:
@@ -151,14 +151,14 @@ async def main():
         tts_factory = CustomAsyncOpenAI.create_autodetected_factory()
     else:
         tts_factory = CustomAsyncOpenAI.create_backend_factory(args.tts_backend)
-    tts_client = await tts_factory(api_key=args.tts_openai_key, base_url=args.tts_openai_url)
+    tts_client = await tts_factory(api_key=args.tts_elevenlabs_key, base_url=args.tts_elevenlabs_url)
     _logger.debug("Detected TTS backend: %s", tts_client.backend)
 
-    asr_models = create_asr_models(args.stt_models, args.stt_openai_url, args.languages)
+    asr_models = create_asr_models(args.stt_models, args.stt_elevenlabs_url, args.languages)
 
     if args.tts_voices:
         # If TTS_VOICES is set, use that
-        tts_voices = create_tts_voices(args.tts_models, args.tts_voices, args.tts_openai_url, args.languages)
+        tts_voices = create_tts_voices(args.tts_models, args.tts_voices, args.tts_elevenlabs_url, args.languages)
     else:
         # Otherwise, list supported voices via defaults
         tts_voices = await tts_client.list_supported_voices(args.tts_models, args.languages)

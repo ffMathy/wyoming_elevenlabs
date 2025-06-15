@@ -1,7 +1,7 @@
 services:
-  wyoming_openai:
-    image: ghcr.io/roryeckel/wyoming_openai:latest
-    container_name: wyoming_openai
+  wyoming_elevenlabs:
+    image: ghcr.io/roryeckel/wyoming_elevenlabs:latest
+    container_name: wyoming_elevenlabs
     ports:
       - "10300:10300"
     restart: unless-stopped
@@ -9,10 +9,10 @@ services:
       WYOMING_URI: tcp://0.0.0.0:10300
       WYOMING_LOG_LEVEL: INFO
       WYOMING_LANGUAGES: en
-      STT_OPENAI_URL: http://speaches:8000/v1
+      STT_ELEVENLABS_URL: http://speaches:8000/v1
       STT_MODELS: "Systran/faster-distil-whisper-large-v3"
       STT_BACKEND: "SPEACHES"
-      TTS_OPENAI_URL: http://speaches:8000/v1
+      TTS_ELEVENLABS_URL: http://speaches:8000/v1
       TTS_MODELS: "speaches-ai/Kokoro-82M-v1.0-ONNX"
       TTS_BACKEND: "SPEACHES"
       # TTS_VOICES: "af af_bella af_sarah am_adam am_michael bf_emma bf_isabella bm_george bm_lewis af_nicole af_sky"

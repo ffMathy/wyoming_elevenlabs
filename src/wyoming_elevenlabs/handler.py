@@ -2,7 +2,7 @@ import asyncio
 import logging
 import wave
 
-from openai import NOT_GIVEN
+from elevenlabs import NOT_GIVEN
 from wyoming.asr import Transcribe, Transcript
 from wyoming.audio import AudioChunk, AudioStart, AudioStop
 from wyoming.event import Event
@@ -52,11 +52,11 @@ class OpenAIEventHandler(AsyncEventHandler):
         self._wyoming_info = Info(
             asr=[
                 AsrProgram(
-                    name="openai",
+                    name="elevenlabs",
                     description="OpenAI-Compatible Proxy",
                     attribution=Attribution(
                         name="Rory Eckel",
-                        url="https://github.com/roryeckel/wyoming-openai/",
+                        url="https://github.com/roryeckel/wyoming-elevenlabs/",
                     ),
                     installed=True,
                     version=__version__,
@@ -65,11 +65,11 @@ class OpenAIEventHandler(AsyncEventHandler):
             ],
             tts=[
                 TtsProgram(
-                    name="openai",
+                    name="elevenlabs",
                     description="OpenAI-Compatible Proxy",
                     attribution=Attribution(
                         name="Rory Eckel",
-                        url="https://github.com/roryeckel/wyoming-openai/",
+                        url="https://github.com/roryeckel/wyoming-elevenlabs/",
                     ),
                     installed=True,
                     version=__version__,

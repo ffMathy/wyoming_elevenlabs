@@ -1,5 +1,5 @@
 services:
-  wyoming_openai:
+  wyoming_elevenlabs:
     build: .
     image: null
     environment:

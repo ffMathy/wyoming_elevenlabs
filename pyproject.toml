@@ -3,7 +3,7 @@ requires = ["setuptools>=65.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "wyoming_openai"
+name = "wyoming_elevenlabs"
 version = "0.3.1"
 description = "OpenAI-Compatible Proxy Middleware for the Wyoming Protocol"
 authors = [
@@ -13,13 +13,13 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 dependencies = [
-    "openai==1.86.0",
+    "elevenlabs==1.86.0",
     "wyoming==1.6.1"
 ]
 
 [project.urls]
-Homepage = "https://github.com/roryeckel/wyoming_openai"
-Issues = "https://github.com/roryeckel/wyoming_openai/issues"
+Homepage = "https://github.com/roryeckel/wyoming_elevenlabs"
+Issues = "https://github.com/roryeckel/wyoming_elevenlabs/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -53,4 +53,4 @@ exclude = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["wyoming_openai"]
+known-first-party = ["wyoming_elevenlabs"]

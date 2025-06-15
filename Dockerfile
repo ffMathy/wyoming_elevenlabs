@@ -31,4 +31,4 @@ RUN pip install --upgrade pip && \
 EXPOSE 10300
 
 # Run the application as an installed module
-CMD ["python", "-m", "wyoming_openai"]
+CMD ["python", "-m", "wyoming_elevenlabs"]

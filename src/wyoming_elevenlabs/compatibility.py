@@ -2,7 +2,7 @@ import logging
 from enum import Enum
 from typing import override
 
-from openai import AsyncOpenAI
+from elevenlabs import AsyncOpenAI
 from wyoming.info import AsrModel, Attribution, TtsVoice
 
 _LOGGER = logging.getLogger(__name__)
@@ -126,7 +126,7 @@ def tts_voice_to_string(tts_voice_model: TtsVoiceModel) -> str:
     )
 
 # https://github.com/speaches-ai/speaches/issues/266
-# async def get_openai_models(
+# async def get_elevenlabs_models(
 #     api_key: str,
 #     base_urls: Set[str]
 # ):
@@ -152,7 +152,7 @@ def tts_voice_to_string(tts_voice_model: TtsVoiceModel) -> str:
 #                 logger.error("Failed to fetch OpenAI models: %s", e)
 
 class OpenAIBackend(Enum):
-    OPENAI = 0 # "Official"
+    ELEVENLABS = 0 # "Official"
     SPEACHES = 1
     KOKORO_FASTAPI = 2
 
@@ -163,7 +163,7 @@ class CustomAsyncOpenAI(AsyncOpenAI):
     def __init__(self, *args, **kwargs):
         if "api_key" not in kwargs or not kwargs["api_key"]:
             kwargs["api_key"] = ""
-        self.backend: OpenAIBackend = kwargs.pop("backend", OpenAIBackend.OPENAI)
+        self.backend: OpenAIBackend = kwargs.pop("backend", OpenAIBackend.ELEVENLABS)
         super().__init__(*args, **kwargs)
 
     @property
@@ -179,10 +179,10 @@ class CustomAsyncOpenAI(AsyncOpenAI):
 
     # OpenAI
 
-    async def list_openai_voices(self) -> list[str]:
+    async def list_elevenlabs_voices(self) -> list[str]:
         """
         Not official implemented by OpenAI, hard-coded.
-        https://platform.openai.com/docs/guides/text-to-speech/voice-options
+        https://platform.elevenlabs.com/docs/guides/text-to-speech/voice-options
         """
         return ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer']
 
@@ -293,8 +293,8 @@ class CustomAsyncOpenAI(AsyncOpenAI):
 
         tts_voice_models = []
         for model_name in model_names:
-            if self.backend == OpenAIBackend.OPENAI:
-                tts_voices = await self.list_openai_voices()
+            if self.backend == OpenAIBackend.ELEVENLABS:
+                tts_voices = await self.list_elevenlabs_voices()
             elif self.backend == OpenAIBackend.SPEACHES:
                 tts_voices = await self._list_speaches_voices(model_name)
             elif self.backend == OpenAIBackend.KOKORO_FASTAPI:
@@ -325,7 +325,7 @@ class CustomAsyncOpenAI(AsyncOpenAI):
             elif await client._is_kokoro_fastapi():
                 client.backend = OpenAIBackend.KOKORO_FASTAPI
             else:
-                client.backend = OpenAIBackend.OPENAI
+                client.backend = OpenAIBackend.ELEVENLABS
             return client
         return factory
 
